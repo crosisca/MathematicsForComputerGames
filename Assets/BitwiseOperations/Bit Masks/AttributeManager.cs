@@ -13,7 +13,7 @@ public class AttributeManager : MonoBehaviour
     public static int INVISIBLE = 1;
 
     public Text attributeDisplay;
-    int attributes = 0;
+    public int attributes = 0;
 
     void OnTriggerEnter(Collider other)
     {
