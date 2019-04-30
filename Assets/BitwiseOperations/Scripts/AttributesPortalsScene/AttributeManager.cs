@@ -18,9 +18,11 @@ public class AttributeManager : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "MAGIC")
-            attributes |= MAGIC; //Add!
+            //attributes |= MAGIC; //Add!
+            attributes ^= MAGIC; //Toggle!
         else if (other.gameObject.tag == "INTELLIGENCE")
-            attributes |= INTELLIGENCE; //Add!
+            //attributes |= INTELLIGENCE; //Add!
+            attributes ^= INTELLIGENCE; //Toggle!
         else if (other.gameObject.tag == "CHARISMA")
             attributes |= CHARISMA; //Add!
         else if (other.gameObject.tag == "FLY")
