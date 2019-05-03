@@ -99,7 +99,7 @@ public class CreateBoardChallenge : MonoBehaviour
                 int row = (int)hit.transform.position.z;
                 int column = (int)hit.transform.position.x;
 
-                if (GetCellState(dirtBB & ~treeBB, row, column)//is dirt and is not tree
+                if (GetCellState(dirtBB & ~treeBB, row, column))//is dirt and is not tree
                 {
                     
                     GameObject house = Instantiate(housePrefab);
