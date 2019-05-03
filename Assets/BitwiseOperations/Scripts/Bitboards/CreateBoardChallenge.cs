@@ -13,6 +13,7 @@ public class CreateBoardChallenge : MonoBehaviour
     GameObject[] tiles;
 
     long dirtBB; // long = 64 bits
+    long desertBB;
     long treeBB;
     long playerBB;
 
@@ -36,6 +37,8 @@ public class CreateBoardChallenge : MonoBehaviour
                     dirtBB = SetCellState(dirtBB, row, column);
                     //PrintBitboard("Dirt", dirtBB);
                 }
+                else if (tile.tag == "Desert")
+                    desertBB = SetCellState(desertBB, row, column);
             }
         }
         Debug.Log($"Dirt cells = {CellCount(dirtBB)}");
@@ -99,13 +102,15 @@ public class CreateBoardChallenge : MonoBehaviour
                 int row = (int)hit.transform.position.z;
                 int column = (int)hit.transform.position.x;
 
-                if (GetCellState(dirtBB & ~treeBB, row, column))//is dirt and is not tree
+                if (GetCellState((dirtBB & ~treeBB) | desertBB, row, column)) // ignores check for trees on deserts (cuz they dont grow there anyway)
+                //if (GetCellState((dirtBB | desertBB) & ~treeBB, row, column))//is dirt (or desert) and is not tree..(my solution), was also checking for trees on desert tiles
                 {
                     
                     GameObject house = Instantiate(housePrefab);
                     house.transform.parent = hit.collider.gameObject.transform;
                     house.transform.localPosition = Vector3.zero;
-                    playerBB = SetCellState(playerBB, (int)hit.transform.position.z, (int)hit.transform.position.x);
+                    playerBB = SetCellState(playerBB, row, column);
+                    CalculateScore();
                 }
 
 
@@ -121,6 +126,20 @@ public class CreateBoardChallenge : MonoBehaviour
                 //}
             }
         }
+    }
+
+    void CalculateScore ()
+    {
+        int points = 0;
+
+        points += CellCount(playerBB & dirtBB) * 10;
+        points += CellCount(playerBB & desertBB) * 2;
+
+        score.text = $"Score: {points}";
+
+        //build houses on dirt and desert - OK
+        //house on dirt = 10 points
+        //house on desert = 2 points
     }
 }
 
